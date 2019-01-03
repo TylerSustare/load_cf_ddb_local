@@ -1,0 +1,191 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: AWS Cloudformation template to create the dynamo table
+Resources:
+  MusicTable:
+    Type: 'AWS::DynamoDB::Table'
+    Properties:
+      TableName: "music"
+      AttributeDefinitions:
+        - 
+          AttributeName: "post_id"
+          AttributeType: "S"
+        - 
+          AttributeName: "resource_id"
+          AttributeType: "S"
+        - 
+          AttributeName: "up"
+          AttributeType: "N"
+        - 
+          AttributeName: "number_of_children"
+          AttributeType: "N"
+        -
+          AttributeName: "status_parent_post_id_created_at"
+          AttributeType: "S"
+        -
+          AttributeName: "status_parent_post_id_created_by_created_at"
+          AttributeType: "S"
+        -
+          AttributeName: "status_parent_post_id_number_of_children_created_at"
+          AttributeType: "S"
+        -
+          AttributeName: "status_parent_post_id_created_by_number_of_children_created_at"
+          AttributeType: "S"
+        -
+          AttributeName: "resource_id_status_parent_post_id"
+          AttributeType: "S"
+        -
+          AttributeName: "resource_id_status_parent_post_id_created_by"
+          AttributeType: "S"
+        -
+          AttributeName: "resource_id_status_parent_post_id_number_of_children"
+          AttributeType: "S"
+      KeySchema:
+        - 
+          AttributeName: "resource_id"
+          KeyType: "HASH"
+        - 
+          AttributeName: "post_id"
+          KeyType: "RANGE"
+      ProvisionedThroughput:
+        ReadCapacityUnits: 5
+        WriteCapacityUnits: 5
+      LocalSecondaryIndexes:
+        -
+          # [1-a] Resource + Active + [Un-]Parented :: Date
+          IndexName: "resource_id-status_parent_post_id-created_at-index"
+          KeySchema:
+          -
+            AttributeName: "resource_id"
+            KeyType: "HASH"
+          -
+            AttributeName: "status_parent_post_id_created_at"
+            KeyType: "RANGE"
+          Projection:
+            ProjectionType: ALL
+        -
+          # [2-a] Resource + Active + Un-parented + Created By :: Date
+          IndexName: "resource_id-status_parent_post_id_created_by_created_at-index"
+          KeySchema:
+          -
+            AttributeName: "resource_id"
+            KeyType: "HASH"
+          -
+            AttributeName: "status_parent_post_id_created_by_created_at"
+            KeyType: "RANGE"
+          Projection:
+            ProjectionType: ALL
+        -
+          # [3-a] Resource - Active + Un-parented + No children :: Date
+          IndexName: "resource_id-status_parent_post_id_number_of_children_created_at-index"
+          KeySchema:
+          -
+            AttributeName: "resource_id"
+            KeyType: "HASH"
+          -
+            AttributeName: "status_parent_post_id_number_of_children_created_at"
+            KeyType: "RANGE"
+          Projection:
+            ProjectionType: ALL
+        -
+          # [4-a] Resource + Active + Un-parented + Created By + No children :: Date
+          IndexName: "resource_id-status_parent_post_id_created_by_number_of_children_created_at-index"
+          KeySchema:
+          -
+            AttributeName: "resource_id"
+            KeyType: "HASH"
+          -
+            AttributeName: "status_parent_post_id_created_by_number_of_children_created_at"
+            KeyType: "RANGE"
+          Projection:
+            ProjectionType: ALL
+      GlobalSecondaryIndexes:
+        -
+          # [1-b] Resource + Active + [Un-]Parented :: Votes
+          IndexName: "resource_id_status_parent_post_id-up-index" 
+          ProvisionedThroughput:
+            ReadCapacityUnits: 5
+            WriteCapacityUnits: 5
+          KeySchema:
+          -
+            AttributeName: "resource_id_status_parent_post_id"
+            KeyType: "HASH"
+          -
+            AttributeName: "up"
+            KeyType: "RANGE"
+          Projection:
+            ProjectionType: ALL
+        -
+          IndexName: "resource_id_status_parent_post_id-number_of_children-index"
+          # [1-c] Resource + Active + [Un-]Parented :: Replies
+          ProvisionedThroughput:
+            ReadCapacityUnits: 5
+            WriteCapacityUnits: 5
+          KeySchema:
+          -
+            AttributeName: "resource_id_status_parent_post_id"
+            KeyType: "HASH"
+          -
+            AttributeName: "number_of_children"
+            KeyType: "RANGE"
+          Projection:
+            ProjectionType: ALL
+        -
+          # [2-b] Resource + Active + Un-parented + Created By :: Votes
+          IndexName: "resource_id_status_parent_post_id_created_by-up-index" 
+          ProvisionedThroughput:
+            ReadCapacityUnits: 5
+            WriteCapacityUnits: 5
+          KeySchema:
+          -
+            AttributeName: "resource_id_status_parent_post_id_created_by"
+            KeyType: "HASH"
+          -
+            AttributeName: "up"
+            KeyType: "RANGE"
+          Projection:
+            ProjectionType: ALL
+        -
+          IndexName: "resource_id_status_parent_post_id_created_by-number_of_children-index"
+          # [2-c] Resource + Active + Un-parented + Created By :: Replies
+          ProvisionedThroughput:
+            ReadCapacityUnits: 5
+            WriteCapacityUnits: 5
+          KeySchema:
+          -
+            AttributeName: "resource_id_status_parent_post_id_created_by"
+            KeyType: "HASH"
+          -
+            AttributeName: "number_of_children"
+            KeyType: "RANGE"
+          Projection:
+            ProjectionType: ALL
+        -
+          # [3-b] Resource + Active + Un-parented + No children :: Votes
+          IndexName: "resource_id_status_parent_post_id_number_of_children-up-index"
+          ProvisionedThroughput:
+            ReadCapacityUnits: 5
+            WriteCapacityUnits: 5
+          KeySchema:
+          -
+            AttributeName: "resource_id_status_parent_post_id_number_of_children"
+            KeyType: "HASH"
+          -
+            AttributeName: "up"
+            KeyType: "RANGE"
+          Projection:
+            ProjectionType: ALL
+  ForumLoggingRouterDynamoDBTable:
+    Type: 'AWS::DynamoDB::Table'
+    Properties:
+      TableName: "worker-forum-data-analysis-router"
+      AttributeDefinitions:
+        - 
+          AttributeName: "leaseKey"
+          AttributeType: "S"
+      KeySchema:
+        -
+          AttributeName: "leaseKey"
+          KeyType: "HASH"
+      ProvisionedThroughput:
+        ReadCapacityUnits: 5
+        WriteCapacityUnits: 5

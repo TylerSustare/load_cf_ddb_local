@@ -1,0 +1,16 @@
+{
+  "name": "ddb_local",
+  "version": "1.0.0",
+  "description": "",
+  "main": "ddb_local.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "aws-sdk": "^2.345.0",
+    "lodash": "^4.17.11",
+    "yamljs": "^0.3.0"
+  }
+}
