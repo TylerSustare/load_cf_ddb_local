@@ -2,55 +2,45 @@ AWSTemplateFormatVersion: "2010-09-09"
 Description: AWS Cloudformation template to create the dynamo table
 Resources:
   MusicTable:
-    Type: 'AWS::DynamoDB::Table'
+    Type: "AWS::DynamoDB::Table"
     Properties:
       TableName: "music"
       AttributeDefinitions:
-        - 
-          AttributeName: "genre"
+        - AttributeName: "genre"
           AttributeType: "S"
-        -
-          AttributeName: "artist_album_song"
+        - AttributeName: "artist_album_song"
           AttributeType: "S"
-        -
-          AttributeName: "artist"
+        - AttributeName: "artist"
           AttributeType: "S"
       KeySchema:
-        - 
-          AttributeName: "genre"
+        - AttributeName: "genre"
           KeyType: "HASH"
-        - 
-          AttributeName: "artist_album_song"
+        - AttributeName: "artist_album_song"
           KeyType: "RANGE"
       ProvisionedThroughput:
         ReadCapacityUnits: 1
         WriteCapacityUnits: 1
       LocalSecondaryIndexes:
-        -
-          # genre artist lsi
+        - # genre artist lsi
           IndexName: "genre_artist"
           KeySchema:
-          -
-            AttributeName: "genre"
-            KeyType: "HASH"
-          -
-            AttributeName: "artist"
-            KeyType: "RANGE"
+            - AttributeName: "genre"
+              KeyType: "HASH"
+            - AttributeName: "artist"
+              KeyType: "RANGE"
           Projection:
             ProjectionType: ALL
       GlobalSecondaryIndexes:
-        -
-          # artist sparse index
-          IndexName: "artist_gsi" 
+        - # artist sparse index
+          IndexName: "artist_gsi"
           ProvisionedThroughput:
             ReadCapacityUnits: 1
             WriteCapacityUnits: 1
           KeySchema:
-          -
-            AttributeName: "artist"
-            KeyType: "HASH"
+            - AttributeName: "artist"
+              KeyType: "HASH"
           # -
-            # AttributeName: "up"
-            # KeyType: "RANGE"
+          # AttributeName: "album"
+          # KeyType: "RANGE"
           Projection:
             ProjectionType: ALL

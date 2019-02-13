@@ -13,13 +13,15 @@
 //     Item: { // a map of attribute name to AttributeValue
 //         genre: 'country',
 //         artist_album_song: 'George Strait'
+//         artist: 'George Strait'
+
 //     }
 // };
 // docClient.put(params1, function(err, data) {
 //     if (err) ppJson(err); // an error occurred
 //     else ppJson(data); // successful response
 // });
-//
+
 // var params2 = {
 //     TableName: 'music',
 //     Item: { // a map of attribute name to AttributeValue
