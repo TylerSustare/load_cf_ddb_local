@@ -74,3 +74,15 @@ dynamodb.scan(params, function(err, data) {
 });
 
 // ******************** query ******************************
+var params = {
+  TableName: 'music',
+  KeyConditionExpression: 'genre = :value and begins_with (artist_album_song, :val)', 
+  ExpressionAttributeValues: {
+    ':value': 'country',
+    ':val': "George Strait_Some"
+  },
+};
+docClient.query(params, function(err, data) {
+  if (err) ppJson(err); // an error occurred
+  else ppJson(data); // successful response
+});
