@@ -4,7 +4,9 @@
   "description": "",
   "main": "ddb_local.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "db": "docker run -p 8000:8000 dwmkerr/dynamodb -sharedDb",
+    "up": "ACTION=CREATE node ddb_local.js",
+    "down": "ACTION=DELETE node ddb_local.js"
   },
   "author": "",
   "license": "ISC",

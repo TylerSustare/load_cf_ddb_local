@@ -8,39 +8,36 @@ Resources:
       AttributeDefinitions:
         - AttributeName: "genre"
           AttributeType: "S"
-        - AttributeName: "artist_album_song"
-          AttributeType: "S"
         - AttributeName: "artist"
           AttributeType: "S"
       KeySchema:
         - AttributeName: "genre"
           KeyType: "HASH"
-        - AttributeName: "artist_album_song"
+        - AttributeName: "artist"
           KeyType: "RANGE"
       ProvisionedThroughput:
         ReadCapacityUnits: 1
         WriteCapacityUnits: 1
-      LocalSecondaryIndexes:
-        - # genre artist lsi
-          IndexName: "genre_artist"
-          KeySchema:
-            - AttributeName: "genre"
-              KeyType: "HASH"
-            - AttributeName: "artist"
-              KeyType: "RANGE"
-          Projection:
-            ProjectionType: ALL
-      GlobalSecondaryIndexes:
-        - # artist sparse index
-          IndexName: "artist_gsi"
-          ProvisionedThroughput:
-            ReadCapacityUnits: 1
-            WriteCapacityUnits: 1
-          KeySchema:
-            - AttributeName: "artist"
-              KeyType: "HASH"
-          # -
-          # AttributeName: "album"
-          # KeyType: "RANGE"
-          Projection:
-            ProjectionType: ALL
+      # LocalSecondaryIndexes:
+      #   - # genre artist lsi
+      #     IndexName: "genre_artist"
+      #     KeySchema:
+      #       - AttributeName: "genre"
+      #         KeyType: "HASH"
+      #       - AttributeName: "artist"
+      #         KeyType: "RANGE"
+      #     Projection:
+      #       ProjectionType: ALL
+      # GlobalSecondaryIndexes:
+      #     IndexName: "artist_gsi"
+      #     ProvisionedThroughput:
+      #       ReadCapacityUnits: 1
+      #       WriteCapacityUnits: 1
+      #     KeySchema:
+      #       - AttributeName: "artist"
+      #         KeyType: "HASH"
+      #       -
+      #       AttributeName: "album"
+      #       KeyType: "RANGE"
+      #     Projection:
+      #       ProjectionType: ALL
