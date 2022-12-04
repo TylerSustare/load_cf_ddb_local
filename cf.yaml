@@ -6,38 +6,33 @@ Resources:
     Properties:
       TableName: "music"
       AttributeDefinitions:
-        - AttributeName: "genre"
+        - AttributeName: "pk"
           AttributeType: "S"
-        - AttributeName: "artist"
+        - AttributeName: "sk"
           AttributeType: "S"
       KeySchema:
-        - AttributeName: "genre"
+        - AttributeName: "pk"
           KeyType: "HASH"
-        - AttributeName: "artist"
+        - AttributeName: "sk"
           KeyType: "RANGE"
       ProvisionedThroughput:
         ReadCapacityUnits: 1
         WriteCapacityUnits: 1
-      # LocalSecondaryIndexes:
-      #   - # genre artist lsi
-      #     IndexName: "genre_artist"
-      #     KeySchema:
-      #       - AttributeName: "genre"
-      #         KeyType: "HASH"
-      #       - AttributeName: "artist"
-      #         KeyType: "RANGE"
-      #     Projection:
-      #       ProjectionType: ALL
-      # GlobalSecondaryIndexes:
-      #     IndexName: "artist_gsi"
-      #     ProvisionedThroughput:
-      #       ReadCapacityUnits: 1
-      #       WriteCapacityUnits: 1
-      #     KeySchema:
-      #       - AttributeName: "artist"
-      #         KeyType: "HASH"
-      #       -
-      #       AttributeName: "album"
-      #       KeyType: "RANGE"
-      #     Projection:
-      #       ProjectionType: ALL
+
+      GlobalSecondaryIndexes:
+          IndexName: "by_sk"
+          ProvisionedThroughput:
+            ReadCapacityUnits: 1
+            WriteCapacityUnits: 1
+          KeySchema:
+            - AttributeName: "sk"
+              KeyType: "HASH"
+            - AttributeName: "pk"
+              KeyType: "RANGE"
+          Projection:
+            ProjectionType: ALL
+
+genre:
+  artist: --|
+  |  album: | 
+  |--song: -|
